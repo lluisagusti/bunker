@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/bunker-map/static/js/main.a44d975f.js",
+    "main.js": "/bunker-map/static/js/main.0b8d5c25.js",
     "index.html": "/bunker-map/index.html",
-    "main.a44d975f.js.map": "/bunker-map/static/js/main.a44d975f.js.map"
+    "main.0b8d5c25.js.map": "/bunker-map/static/js/main.0b8d5c25.js.map"
   },
   "entrypoints": [
-    "static/js/main.a44d975f.js"
+    "static/js/main.0b8d5c25.js"
   ]
 }
