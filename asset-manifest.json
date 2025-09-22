@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/bunker-map/static/js/main.0b8d5c25.js",
-    "index.html": "/bunker-map/index.html",
-    "main.0b8d5c25.js.map": "/bunker-map/static/js/main.0b8d5c25.js.map"
+    "main.js": "/bunker/static/js/main.0b8d5c25.js",
+    "index.html": "/bunker/index.html",
+    "main.0b8d5c25.js.map": "/bunker/static/js/main.0b8d5c25.js.map"
   },
   "entrypoints": [
     "static/js/main.0b8d5c25.js"
