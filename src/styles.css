@@ -1,0 +1,13 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+a {
+  color: #fff;
+  font-size: 20px;
+}
+
+a:hover {
+  color: #ddd;
+}
