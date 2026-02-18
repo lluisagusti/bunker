@@ -59,8 +59,42 @@ function CentralShaft() {
 
             {/* Elevator Platforms */}
             <Elevator y={0} speed={0.1} offset={0} />
+
+            {/* Spiral Staircase */}
+            <SpiralStaircase />
         </group>
     );
+}
+
+function SpiralStaircase() {
+    // Generate steps
+    const stepCount = 480; // High count for "tiny steps" feel
+    const height = 30; // Total height matching shaft
+    const radius = 2.1; // Slightly larger than elevator (1.5 width => ~1.1 radius) but smaller than shaft (2.5)
+    const turns = 5; // Number of full rotations
+
+    const steps = Array.from({ length: stepCount }, (_, i) => {
+        const t = i / stepCount;
+        const angle = t * Math.PI * 2 * turns;
+        const y = (t * height) - (height / 2) - 2; // Centered vertically, offset like shaft
+
+        return (
+            <group key={i} position={[0, y, 0]} rotation={[0, -angle, 0]}>
+                <mesh position={[radius, 0, 0]}>
+                    <boxGeometry args={[0.125, 0.0125, 0.05]} /> {/* Tiny step: 25% of original */}
+                    <meshStandardMaterial
+                        color="#a5f3fc"
+                        transparent
+                        opacity={0.3}
+                        side={THREE.DoubleSide}
+                        metalness={0.8}
+                    />
+                </mesh>
+            </group>
+        );
+    });
+
+    return <group>{steps}</group>;
 }
 
 function Elevator({ y, speed, offset }) {
