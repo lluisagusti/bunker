@@ -1,10 +1,10 @@
-import Bunker from "./Bunker.jsx";
+import Bunker from "./Bunker3D.jsx";
 
 const App = () => {
   return (
- <div>
+    <div>
       <section>
-            <Bunker />
+        <Bunker />
       </section>
     </div>
   );
