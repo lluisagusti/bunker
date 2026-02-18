@@ -314,70 +314,117 @@ function UIOverlay({ selectedRoom, onClose }) {
     if (!selectedRoom) return null;
 
     return (
-        <div style={{
+        <div className="hacker-box" style={{
             position: 'absolute',
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(15, 23, 42, 0.95)',
-            border: `2px solid ${selectedRoom.color}`,
-            boxShadow: `0 0 30px ${selectedRoom.color}40`,
             padding: '2rem',
-            borderRadius: '16px',
-            color: 'white',
-            maxWidth: '500px',
+            borderRadius: '4px',
+            maxWidth: '600px',
             width: '90%',
             zIndex: 50,
-            backdropFilter: 'blur(10px)',
-            fontFamily: "'Share Tech Mono'"
+            backdropFilter: 'blur(5px)',
+            fontFamily: "'Share Tech Mono', monospace"
         }}>
-            <button
-                onClick={onClose}
-                style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    background: 'none',
-                    border: 'none',
-                    color: 'rgba(255,255,255,0.6)',
-                    fontSize: '1.5rem',
-                    cursor: 'pointer'
-                }}
-            >
-                ✕
-            </button>
-
-            <h2 style={{
-                margin: '0 0 1rem 0',
-                color: selectedRoom.color,
-                fontSize: '1.8rem',
-                textTransform: 'uppercase',
-                letterSpacing: '2px'
-            }}>
-                {selectedRoom.id} // {selectedRoom.name}
-            </h2>
-
             <div style={{
-                width: '100%',
-                height: '250px',
-                background: `url(${selectedRoom.image}) center/cover no-repeat`,
-                borderRadius: '8px',
-                marginBottom: '1.5rem',
-                border: '1px solid rgba(255,255,255,0.1)'
-            }} />
-
-            <p style={{
-                lineHeight: 1.6,
-                color: '#cbd5e1',
-                fontSize: '1rem'
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '30px',
+                background: 'rgba(51, 255, 51, 0.1)',
+                borderBottom: '1px solid #33ff33',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 10px',
+                fontSize: '0.8rem'
             }}>
-                {selectedRoom.description}
-            </p>
+                <span>TERMINAL_ACCESS_GRANTED :: {selectedRoom.id.toUpperCase()}</span>
+                <button
+                    onClick={onClose}
+                    className="hacker-btn"
+                    style={{ marginLeft: 'auto', border: 'none', fontSize: '1.2rem', padding: '0 5px' }}
+                >
+                    ✕
+                </button>
+            </div>
 
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', fontSize: '0.8rem', color: '#64748b' }}>
-                <span>LEVEL: {selectedRoom.level}</span>
-                <span>SECTOR: {selectedRoom.angle}°</span>
-                <span>TYPE: {selectedRoom.type?.toUpperCase()}</span>
+            <div style={{ marginTop: '30px', display: 'flex', gap: '20px', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                    <div style={{
+                        width: '200px',
+                        height: '150px',
+                        background: `url(${selectedRoom.image}) center/cover no-repeat`,
+                        border: '1px solid #33ff33',
+                        position: 'relative',
+                        flexShrink: 0
+                    }}>
+                        <div style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                            background: '#000',
+                            color: '#33ff33',
+                            fontSize: '0.7rem',
+                            padding: '2px 4px'
+                        }}>IMG_REF_0{Math.floor(Math.random() * 99)}</div>
+                    </div>
+
+                    <div>
+                        <h2 style={{
+                            margin: '0 0 10px 0',
+                            color: '#33ff33',
+                            fontSize: '1.8rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '2px',
+                            borderBottom: '1px dashed #33ff33',
+                            paddingBottom: '5px'
+                        }}>
+                            {selectedRoom.name}
+                        </h2>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.85rem', color: 'rgba(51, 255, 51, 0.8)' }}>
+                            <div>&gt; LEVEL: {selectedRoom.level}</div>
+                            <div>&gt; SECTOR: {selectedRoom.angle}°</div>
+                            <div>&gt; TYPE: {selectedRoom.type?.toUpperCase()}</div>
+                            <div>&gt; STATUS: ONLINE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style={{
+                    border: '1px solid rgba(51, 255, 51, 0.3)',
+                    padding: '15px',
+                    background: 'rgba(0, 20, 0, 0.5)',
+                    position: 'relative'
+                }}>
+                    <div style={{
+                        position: 'absolute',
+                        top: '-10px',
+                        left: '10px',
+                        background: '#0a0a0a',
+                        padding: '0 5px',
+                        color: '#33ff33',
+                        fontSize: '0.8rem'
+                    }}>LOG_ENTRY</div>
+                    <p style={{
+                        lineHeight: 1.6,
+                        color: '#ccffcc',
+                        fontSize: '1rem',
+                        margin: 0,
+                        whiteSpace: 'pre-wrap'
+                    }}>
+                        {selectedRoom.description}
+                        <span style={{ animation: 'flicker 1s infinite' }}>_</span>
+                    </p>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                    <button className="hacker-btn" style={{ flex: 1 }}>RUN_DIAGNOSTIC</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>OVERRIDE_LOCK</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>VIEW_LOGS</button>
+                </div>
             </div>
         </div>
     );
