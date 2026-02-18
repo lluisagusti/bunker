@@ -110,6 +110,12 @@ const HackerStyles = () => (
             color: #000;
             box-shadow: 0 0 15px rgba(51, 255, 51, 0.8);
         }
+        
+        .hacker-btn.active {
+            background: #33ff33;
+            color: #000;
+            box-shadow: 0 0 15px rgba(51, 255, 51, 0.8);
+        }
 
         .typewriter-text {
             overflow: hidden;
@@ -288,7 +294,7 @@ function ConnectionTube({ from, toRoom }) {
     );
 }
 
-function Room({ data, position, onClick, isSelected }) {
+function Room({ data, position, onClick, isSelected, language }) {
     const ref = useRef();
     const [hovered, setHover] = useState(false);
 
@@ -332,7 +338,7 @@ function Room({ data, position, onClick, isSelected }) {
                     pointerEvents: 'none',
                     fontFamily: "'Share Tech Mono', monospace"
                 }}>
-                    {data.name}
+                    {data.name[language]}
                 </div>
             </Html>
         </group>
@@ -360,7 +366,7 @@ function InterRoomTube({ p1, p2 }) {
     );
 }
 
-function BunkerView({ onSelectRoom, selectedRoomId }) {
+function BunkerView({ onSelectRoom, selectedRoomId, language }) {
     // Convert spherical coords to cartesian for room placement
     // level maps to Y, angle maps to X/Z
     const radius = 8;
@@ -414,6 +420,7 @@ function BunkerView({ onSelectRoom, selectedRoomId }) {
                             position={room.position}
                             onClick={onSelectRoom}
                             isSelected={selectedRoomId === room.id}
+                            language={language}
                         />
                     </React.Fragment>
                 );
@@ -423,7 +430,7 @@ function BunkerView({ onSelectRoom, selectedRoomId }) {
 }
 
 // --- 2D Overlay ---
-function UIOverlay({ selectedRoom, onClose }) {
+function UIOverlay({ selectedRoom, onClose, language }) {
     if (!selectedRoom) return null;
 
     return (
@@ -494,14 +501,14 @@ function UIOverlay({ selectedRoom, onClose }) {
                             borderBottom: '1px dashed #33ff33',
                             paddingBottom: '5px'
                         }}>
-                            {selectedRoom.name}
+                            {selectedRoom.name[language]}
                         </h2>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.85rem', color: 'rgba(51, 255, 51, 0.8)' }}>
                             <div>&gt; LEVEL: {selectedRoom.level}</div>
                             <div>&gt; SECTOR: {selectedRoom.angle}°</div>
                             <div>&gt; TYPE: {selectedRoom.type?.toUpperCase()}</div>
-                            <div>&gt; STATUS: ONLINE</div>
+                            <div>&gt; STATUS: {language === 'en' ? 'ONLINE' : 'EN LÍNEA'}</div>
                         </div>
                     </div>
                 </div>
@@ -528,15 +535,15 @@ function UIOverlay({ selectedRoom, onClose }) {
                         margin: 0,
                         whiteSpace: 'pre-wrap'
                     }}>
-                        {selectedRoom.description}
+                        {selectedRoom.description[language]}
                         <span style={{ animation: 'flicker 1s infinite' }}>_</span>
                     </p>
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                    <button className="hacker-btn" style={{ flex: 1 }}>RUN_DIAGNOSTIC</button>
-                    <button className="hacker-btn" style={{ flex: 1 }}>OVERRIDE_LOCK</button>
-                    <button className="hacker-btn" style={{ flex: 1 }}>VIEW_LOGS</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>{language === 'en' ? 'RUN_DIAGNOSTIC' : 'EJECUTAR_DIAG'}</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>{language === 'en' ? 'OVERRIDE_LOCK' : 'ANULAR_CIERRE'}</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>{language === 'en' ? 'VIEW_LOGS' : 'VER_REGISTROS'}</button>
                 </div>
             </div>
         </div>
@@ -634,6 +641,7 @@ function Terrain() {
 
 export default function Bunker3D() {
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const [language, setLanguage] = useState('en'); // 'en' or 'es'
 
     return (
         <div className="crt" style={{ width: '100%', height: '100vh', background: '#000', position: 'relative' }}>
@@ -646,33 +654,55 @@ export default function Bunker3D() {
                 top: 20,
                 left: 20,
                 zIndex: 10,
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                width: 'calc(100% - 40px)',
                 pointerEvents: 'none'
             }}>
-                <div style={{
-                    borderBottom: '2px solid #33ff33',
-                    paddingBottom: '5px',
-                    marginBottom: '5px',
-                    display: 'inline-block'
-                }}>
-                    <h1 style={{
-                        margin: 0,
-                        fontSize: '1.8rem',
-                        fontWeight: 'bold',
-                        color: '#33ff33',
-                        textShadow: '0 0 10px rgba(51, 255, 51, 0.8)'
+                <div>
+                    <div style={{
+                        borderBottom: '2px solid #33ff33',
+                        paddingBottom: '5px',
+                        marginBottom: '5px',
+                        display: 'inline-block'
                     }}>
-                        &gt; BUNKER_OS v9.2
-                    </h1>
+                        <h1 style={{
+                            margin: 0,
+                            fontSize: '1.8rem',
+                            fontWeight: 'bold',
+                            color: '#33ff33',
+                            textShadow: '0 0 10px rgba(51, 255, 51, 0.8)'
+                        }}>
+                            &gt; BUNKER_OS v9.2
+                        </h1>
+                    </div>
+                    <p style={{
+                        margin: 0,
+                        fontSize: '1rem',
+                        color: '#33ff33',
+                        opacity: 0.8,
+                        fontFamily: 'monospace'
+                    }}>
+                        [{language === 'en' ? 'SECURE FACILITY VISUALIZATION' : 'VISUALIZACIÓN DE INSTALACIÓN SEGURA'}] :: [{language === 'en' ? 'SYSTEM ONLINE' : 'SISTEMA CONECTADO'}]
+                    </p>
                 </div>
-                <p style={{
-                    margin: 0,
-                    fontSize: '1rem',
-                    color: '#33ff33',
-                    opacity: 0.8,
-                    fontFamily: 'monospace'
-                }}>
-                    [SECURE FACILITY VISUALIZATION] :: SYSTEM_ONLINE
-                </p>
+
+                {/* Language Switcher */}
+                <div style={{ pointerEvents: 'auto', display: 'flex', gap: '5px' }}>
+                    <button
+                        className={`hacker-btn ${language === 'en' ? 'active' : ''}`}
+                        onClick={() => setLanguage('en')}
+                    >
+                        EN
+                    </button>
+                    <button
+                        className={`hacker-btn ${language === 'es' ? 'active' : ''}`}
+                        onClick={() => setLanguage('es')}
+                    >
+                        ES
+                    </button>
+                </div>
             </div>
 
             <div style={{
@@ -686,7 +716,7 @@ export default function Bunker3D() {
                 opacity: 0.7,
                 textShadow: '0 0 5px rgba(51, 255, 51, 0.5)'
             }}>
-                &gt; CONTROLS: DOUBLE_CLICK=ROTATE | SCROLL=ZOOM | CLICK_NODES=ACCESS_DATA
+                &gt; {language === 'en' ? 'CONTROLS: DOUBLE_CLICK=ROTATE | SCROLL=ZOOM | CLICK_NODES=ACCESS_DATA' : 'CONTROLES: DOBLE_CLIC=ROTAR | SCROLL=ZOOM | CLIC_NODOS=ACCESO_DATOS'}
             </div>
 
             <Canvas camera={{ position: [20, 10, 20], fov: 50 }}>
@@ -702,6 +732,7 @@ export default function Bunker3D() {
                         <BunkerView
                             onSelectRoom={setSelectedRoom}
                             selectedRoomId={selectedRoom?.id}
+                            language={language}
                         />
                     </group>
                     <Terrain />
@@ -721,6 +752,7 @@ export default function Bunker3D() {
             <UIOverlay
                 selectedRoom={selectedRoom}
                 onClose={() => setSelectedRoom(null)}
+                language={language}
             />
         </div>
     );
