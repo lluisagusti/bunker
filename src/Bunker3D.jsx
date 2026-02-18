@@ -58,9 +58,7 @@ function CentralShaft() {
             ))}
 
             {/* Elevator Platforms */}
-            <Elevator y={-6} speed={0.5} offset={0} />
-            <Elevator y={0} speed={0.3} offset={2} />
-            <Elevator y={5} speed={0.4} offset={4} />
+            <Elevator y={0} speed={0.1} offset={0} />
         </group>
     );
 }
@@ -68,25 +66,43 @@ function CentralShaft() {
 function Elevator({ y, speed, offset }) {
     const ref = useRef();
     useFrame((state) => {
-        // Complex movement pattern
         const time = state.clock.elapsedTime * speed + offset;
         ref.current.position.y = Math.sin(time) * 10 - 2;
     });
 
     return (
         <group ref={ref}>
-            {/* Platform Ring */}
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[2.0, 0.1, 8, 32]} />
-                <meshStandardMaterial color="#f59e0b" emissive="#f59e0b" emissiveIntensity={0.5} />
+            {/* Cabin Box - Glass with Metal Frame */}
+            <mesh position={[0, 1, 0]}>
+                <boxGeometry args={[1.5, 2.2, 1.5]} />
+                <meshStandardMaterial
+                    color="#94a3b8"
+                    transparent
+                    opacity={0.3}
+                    metalness={0.9}
+                    roughness={0.1}
+                    side={THREE.DoubleSide}
+                />
             </mesh>
-            {/* Platform Floor (Glass) */}
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <circleGeometry args={[2.0, 32]} />
-                <meshStandardMaterial color="#f59e0b" opacity={0.2} transparent side={THREE.DoubleSide} />
+
+            {/* Metal Frame edges */}
+            <mesh position={[0, 0, 0]}>
+                <boxGeometry args={[1.55, 0.1, 1.55]} />
+                <meshStandardMaterial color="#334155" metalness={0.8} />
             </mesh>
-            {/* Lights */}
-            <pointLight distance={8} intensity={2} color="#f59e0b" decay={2} />
+            <mesh position={[0, 2.1, 0]}>
+                <boxGeometry args={[1.55, 0.1, 1.55]} />
+                <meshStandardMaterial color="#334155" metalness={0.8} />
+            </mesh>
+
+            {/* Interior Light */}
+            <pointLight position={[0, 1.8, 0]} distance={4} intensity={0.8} color="#fef3c7" />
+
+            {/* Floor */}
+            <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[1.4, 1.4]} />
+                <meshStandardMaterial color="#475569" />
+            </mesh>
         </group>
     );
 }
@@ -124,9 +140,6 @@ function Room({ data, position, onClick, isSelected }) {
     useFrame(() => {
         const targetScale = hovered || isSelected ? 1.2 : 1;
         ref.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
-
-        // Slow rotation
-        ref.current.rotation.y += 0.005;
     });
 
     return (
@@ -420,7 +433,7 @@ export default function Bunker3D() {
                     minDistance={10}
                     maxDistance={60}
                     maxPolarAngle={Math.PI / 1.8}
-                    autoRotate={!selectedRoom}
+                    autoRotate={false}
                     autoRotateSpeed={0.5}
                     target={[0, -5, 0]}
                 />
