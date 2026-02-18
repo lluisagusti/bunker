@@ -276,6 +276,95 @@ function UIOverlay({ selectedRoom, onClose }) {
     );
 }
 
+// --- Environment Components ---
+
+function Tree({ position }) {
+    return (
+        <group position={position}>
+            {/* Trunk */}
+            <mesh position={[0, 1, 0]}>
+                <cylinderGeometry args={[0.2, 0.4, 2, 8]} />
+                <meshStandardMaterial color="#3f2e18" roughness={0.9} />
+            </mesh>
+            {/* Leaves */}
+            <mesh position={[0, 3, 0]}>
+                <coneGeometry args={[1.5, 3, 8]} />
+                <meshStandardMaterial color="#166534" roughness={0.8} />
+            </mesh>
+            <mesh position={[0, 4.5, 0]}>
+                <coneGeometry args={[1.2, 2.5, 8]} />
+                <meshStandardMaterial color="#166534" roughness={0.8} />
+            </mesh>
+        </group>
+    );
+}
+
+function Rock({ position, scale = 1 }) {
+    return (
+        <mesh position={position} rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]} scale={scale}>
+            <dodecahedronGeometry args={[0.8, 0]} />
+            <meshStandardMaterial color="#57534e" roughness={0.9} />
+        </mesh>
+    );
+}
+
+function Terrain() {
+    // Generate random trees and rocks
+    const trees = Array.from({ length: 40 }, (_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 8 + Math.random() * 25;
+        return {
+            x: Math.sin(angle) * radius,
+            z: Math.cos(angle) * radius,
+            key: i
+        };
+    });
+
+    const rocks = Array.from({ length: 20 }, (_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 5 + Math.random() * 30;
+        return {
+            x: Math.sin(angle) * radius,
+            z: Math.cos(angle) * radius,
+            scale: 0.5 + Math.random(),
+            key: i
+        };
+    });
+
+    return (
+        <group position={[0, 0, 0]}>
+            {/* Ground Plane */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+                <planeGeometry args={[100, 100, 32]} />
+                <meshStandardMaterial color="#1c1917" roughness={1} />
+            </mesh>
+
+            {/* Grass/Forest Floor Visuals */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+                <circleGeometry args={[50, 64]} />
+                <meshStandardMaterial
+                    color="#14532d"
+                    roughness={1}
+                    transparent
+                    opacity={0.8}
+                />
+            </mesh>
+
+            {/* Trees */}
+            {trees.map(t => <Tree key={t.key} position={[t.x, 0, t.z]} />)}
+
+            {/* Rocks */}
+            {rocks.map(r => <Rock key={r.key} position={[r.x, 0.4, r.z]} scale={r.scale} />)}
+
+            {/* Shaft Opening (Concrete Ring) */}
+            <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[2.5, 4, 32]} />
+                <meshStandardMaterial color="#44403c" roughnes={0.8} />
+            </mesh>
+        </group>
+    );
+}
+
 export default function Bunker3D() {
     const [selectedRoom, setSelectedRoom] = useState(null);
 
@@ -308,27 +397,32 @@ export default function Bunker3D() {
                 Double click to rotate • Scroll to zoom • Click nodes for details
             </div>
 
-            <Canvas camera={{ position: [15, 10, 15], fov: 45 }}>
-                <fog attach="fog" args={['#0f172a', 10, 40]} />
-                <ambientLight intensity={0.5} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-                <pointLight position={[-10, -10, -10]} intensity={0.5} />
+            <Canvas camera={{ position: [20, 10, 20], fov: 50 }}>
+                <fog attach="fog" args={['#020617', 20, 90]} />
+                <ambientLight intensity={0.4} color="#a5f3fc" />
+                <spotLight position={[50, 50, 20]} angle={0.5} penumbra={1} intensity={1.5} castShadow color="#f0f9ff" />
+                <pointLight position={[-10, -20, -10]} intensity={0.5} color="#06b6d4" />
 
                 <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
 
                 <Suspense fallback={null}>
-                    <BunkerView
-                        onSelectRoom={setSelectedRoom}
-                        selectedRoomId={selectedRoom?.id}
-                    />
+                    <group position={[0, -12, 0]}>
+                        <BunkerView
+                            onSelectRoom={setSelectedRoom}
+                            selectedRoomId={selectedRoom?.id}
+                        />
+                    </group>
+                    <Terrain />
                 </Suspense>
 
                 <OrbitControls
-                    enablePan={false}
+                    enablePan={true}
                     minDistance={10}
-                    maxDistance={30}
+                    maxDistance={60}
+                    maxPolarAngle={Math.PI / 1.8}
                     autoRotate={!selectedRoom}
                     autoRotateSpeed={0.5}
+                    target={[0, -5, 0]}
                 />
             </Canvas>
 
