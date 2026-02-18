@@ -5,7 +5,119 @@ import { OrbitControls, Html, Stars, Text, useTexture } from '@react-three/drei'
 import * as THREE from 'three';
 import { bunkerData } from './data/bunkerData';
 
-// Re-use logic or styles if needed, but this is a fresh 3D implementation.
+// --- Global Hacker Styles ---
+const HackerStyles = () => (
+    <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            5% { opacity: 0.95; }
+            10% { opacity: 0.9; }
+            15% { opacity: 0.95; }
+            20% { opacity: 0.99; }
+            25% { opacity: 0.95; }
+            30% { opacity: 0.9; }
+            35% { opacity: 0.96; }
+            40% { opacity: 0.98; }
+            45% { opacity: 0.95; }
+            50% { opacity: 0.99; }
+            55% { opacity: 0.93; }
+            60% { opacity: 0.9; }
+            65% { opacity: 0.96; }
+            70% { opacity: 1; }
+            75% { opacity: 0.97; }
+            80% { opacity: 0.95; }
+            85% { opacity: 0.92; }
+            90% { opacity: 0.98; }
+            95% { opacity: 0.99; }
+            100% { opacity: 0.96; }
+        }
+
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(32, 255, 77, 0.1) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        .hacker-box {
+            background: rgba(0, 20, 0, 0.9);
+            border: 1px solid #33ff33;
+            box-shadow: 0 0 20px rgba(51, 255, 51, 0.2), inset 0 0 20px rgba(51, 255, 51, 0.1);
+            color: #33ff33;
+            text-shadow: 0 0 5px rgba(51, 255, 51, 0.8);
+        }
+
+        .hacker-btn {
+            background: transparent;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: inherit;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .hacker-btn:hover {
+            background: #33ff33;
+            color: #000;
+            box-shadow: 0 0 15px rgba(51, 255, 51, 0.8);
+        }
+
+        .typewriter-text {
+            overflow: hidden;
+            white-space: pre-wrap;
+            animation: typing 2s steps(40, end);
+        }
+    `}</style>
+);
 
 // --- 3D Components ---
 
@@ -217,7 +329,8 @@ function Room({ data, position, onClick, isSelected }) {
                     borderRadius: '4px',
                     fontSize: '10px',
                     whiteSpace: 'nowrap',
-                    pointerEvents: 'none'
+                    pointerEvents: 'none',
+                    fontFamily: "'Share Tech Mono', monospace"
                 }}>
                     {data.name}
                 </div>
@@ -523,7 +636,9 @@ export default function Bunker3D() {
     const [selectedRoom, setSelectedRoom] = useState(null);
 
     return (
-        <div style={{ width: '100%', height: '100vh', background: '#0f172a', position: 'relative' }}>
+        <div className="crt" style={{ width: '100%', height: '100vh', background: '#000', position: 'relative' }}>
+            <HackerStyles />
+            <div className="scanline"></div>
 
             {/* Header Overlay */}
             <div style={{
@@ -531,11 +646,33 @@ export default function Bunker3D() {
                 top: 20,
                 left: 20,
                 zIndex: 10,
-                color: 'white',
                 pointerEvents: 'none'
             }}>
-                <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#38bdf8' }}>BUNKER OS v9.2</h1>
-                <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.7 }}>Secure Facility Visualization</p>
+                <div style={{
+                    borderBottom: '2px solid #33ff33',
+                    paddingBottom: '5px',
+                    marginBottom: '5px',
+                    display: 'inline-block'
+                }}>
+                    <h1 style={{
+                        margin: 0,
+                        fontSize: '1.8rem',
+                        fontWeight: 'bold',
+                        color: '#33ff33',
+                        textShadow: '0 0 10px rgba(51, 255, 51, 0.8)'
+                    }}>
+                        &gt; BUNKER_OS v9.2
+                    </h1>
+                </div>
+                <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    color: '#33ff33',
+                    opacity: 0.8,
+                    fontFamily: 'monospace'
+                }}>
+                    [SECURE FACILITY VISUALIZATION] :: SYSTEM_ONLINE
+                </p>
             </div>
 
             <div style={{
@@ -543,19 +680,20 @@ export default function Bunker3D() {
                 bottom: 20,
                 left: 20,
                 zIndex: 10,
-                color: 'white',
+                color: '#33ff33',
                 pointerEvents: 'none',
-                fontSize: '0.8rem',
-                opacity: 0.5
+                fontSize: '0.9rem',
+                opacity: 0.7,
+                textShadow: '0 0 5px rgba(51, 255, 51, 0.5)'
             }}>
-                Double click to rotate • Scroll to zoom • Click nodes for details
+                &gt; CONTROLS: DOUBLE_CLICK=ROTATE | SCROLL=ZOOM | CLICK_NODES=ACCESS_DATA
             </div>
 
             <Canvas camera={{ position: [20, 10, 20], fov: 50 }}>
-                <fog attach="fog" args={['#020617', 20, 90]} />
-                <ambientLight intensity={0.4} color="#a5f3fc" />
-                <spotLight position={[50, 50, 20]} angle={0.5} penumbra={1} intensity={1.5} castShadow color="#f0f9ff" />
-                <pointLight position={[-10, -20, -10]} intensity={0.5} color="#06b6d4" />
+                <fog attach="fog" args={['#000500', 20, 90]} /> {/* Greenish fog */}
+                <ambientLight intensity={0.2} color="#ccffcc" />
+                <spotLight position={[50, 50, 20]} angle={0.5} penumbra={1} intensity={1} castShadow color="#aaffaa" />
+                <pointLight position={[-10, -20, -10]} intensity={0.5} color="#00ff00" />
 
                 <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
 
