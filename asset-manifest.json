@@ -1,10 +1,24 @@
 {
   "files": {
-    "main.js": "/bunker/static/js/main.0b8d5c25.js",
+    "main.js": "/bunker/static/js/main.6d05d6d9.js",
+    "static/media/08_armory.jpg": "/bunker/static/media/08_armory.5efdf9c79175ac62455f.jpg",
+    "static/media/09_lab.jpg": "/bunker/static/media/09_lab.33d8d43664bf8ce32b72.jpg",
+    "static/media/05_private_gym.jpg": "/bunker/static/media/05_private_gym.3a87f9c34a9644be1cac.jpg",
+    "static/media/13_meditation_room.jpg": "/bunker/static/media/13_meditation_room.0ecef03d1393aa57e908.jpg",
+    "static/media/06_industrial_kitchen.jpg": "/bunker/static/media/06_industrial_kitchen.5d380a087669b66751f0.jpg",
+    "static/media/01_control_room.jpg": "/bunker/static/media/01_control_room.965231fee9934aa044e2.jpg",
+    "static/media/10_games-room.jpg": "/bunker/static/media/10_games-room.c47ad82d23ccaef2e12c.jpg",
+    "static/media/02_power_room.jpg": "/bunker/static/media/02_power_room.709ff168912fe9ad0a29.jpg",
+    "static/media/03_kids_room.jpg": "/bunker/static/media/03_kids_room.ef9476e6d9893a205aa4.jpg",
+    "static/media/12_exec_office.jpg": "/bunker/static/media/12_exec_office.314c11baf51c32ef88a1.jpg",
+    "static/media/14_digital_library.jpg": "/bunker/static/media/14_digital_library.d281a1a16d5753ce3523.jpg",
+    "static/media/07_steam-room.jpg": "/bunker/static/media/07_steam-room.ea0f56d84a8ff70d9421.jpg",
+    "static/media/04_master_bedroom.jpg": "/bunker/static/media/04_master_bedroom.368a977afa4a1e04a20d.jpg",
+    "static/media/11_cinema_room.jpg": "/bunker/static/media/11_cinema_room.df212afe120e322841e2.jpg",
     "index.html": "/bunker/index.html",
-    "main.0b8d5c25.js.map": "/bunker/static/js/main.0b8d5c25.js.map"
+    "main.6d05d6d9.js.map": "/bunker/static/js/main.6d05d6d9.js.map"
   },
   "entrypoints": [
-    "static/js/main.0b8d5c25.js"
+    "static/js/main.6d05d6d9.js"
   ]
 }
