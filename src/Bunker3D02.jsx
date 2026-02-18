@@ -10,83 +10,42 @@ import { bunkerData } from './data/bunkerData';
 // --- 3D Components ---
 
 function CentralShaft() {
-    // Structural rings array
-    const rings = Array.from({ length: 15 }, (_, i) => i * 2 - 14);
-
     return (
         <group>
-            {/* Main Outer Glass Shell */}
+            {/* Main Cylinder */}
             <mesh position={[0, -2, 0]}>
-                <cylinderGeometry args={[2.5, 2.5, 30, 32, 1, true]} />
+                <cylinderGeometry args={[2, 2, 15, 32, 1, true]} />
                 <meshStandardMaterial
-                    color="#0f172a"
-                    opacity={0.3}
-                    transparent
+                    color="#334155"
                     side={THREE.DoubleSide}
-                    roughness={0.1}
-                    metalness={0.9}
+                    roughness={0.7}
+                    metalness={0.5}
                 />
             </mesh>
 
-            {/* Inner Core Energy Beam */}
-            <mesh position={[0, -2, 0]}>
-                <cylinderGeometry args={[0.3, 0.3, 30, 16]} />
-                <meshBasicMaterial color="#06b6d4" transparent opacity={0.5} />
-            </mesh>
-            {/* Core Glow */}
-            <mesh position={[0, -2, 0]}>
-                <cylinderGeometry args={[0.6, 0.6, 30, 16]} />
-                <meshBasicMaterial color="#06b6d4" transparent opacity={0.1} depthWrite={false} side={THREE.BackSide} />
-            </mesh>
-
-            {/* Structural Rings */}
-            {rings.map((y, i) => (
-                <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                    <torusGeometry args={[2.6, 0.15, 8, 32]} />
-                    <meshStandardMaterial color="#475569" metalness={0.8} roughness={0.3} />
-                </mesh>
-            ))}
-
-            {/* Vertical Guide Rails */}
-            {[0, 90, 180, 270].map((angle, i) => (
-                <group key={i} rotation={[0, (angle * Math.PI) / 180, 0]}>
-                    <mesh position={[2.4, -2, 0]}>
-                        <boxGeometry args={[0.2, 30, 0.4]} />
-                        <meshStandardMaterial color="#334155" metalness={0.7} />
-                    </mesh>
-                </group>
-            ))}
-
-            {/* Elevator Platforms */}
-            <Elevator y={-6} speed={0.5} offset={0} />
-            <Elevator y={0} speed={0.3} offset={2} />
-            <Elevator y={5} speed={0.4} offset={4} />
+            {/* Elevator Platform (Animated placeholder) */}
+            <Elevator y={-4} speed={0.02} />
+            <Elevator y={2} speed={-0.03} />
         </group>
     );
 }
 
-function Elevator({ y, speed, offset }) {
+function Elevator({ y, speed }) {
     const ref = useRef();
     useFrame((state) => {
-        // Complex movement pattern
-        const time = state.clock.elapsedTime * speed + offset;
-        ref.current.position.y = Math.sin(time) * 10 - 2;
+        // Simple vertical movement
+        ref.current.position.y = y + Math.sin(state.clock.elapsedTime * speed * 10) * 3;
+        // Rotation
+        ref.current.rotation.y += 0.01;
     });
 
     return (
         <group ref={ref}>
-            {/* Platform Ring */}
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[2.0, 0.1, 8, 32]} />
-                <meshStandardMaterial color="#f59e0b" emissive="#f59e0b" emissiveIntensity={0.5} />
+            <mesh>
+                <cylinderGeometry args={[1.8, 1.8, 0.2, 16]} />
+                <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.2} />
             </mesh>
-            {/* Platform Floor (Glass) */}
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <circleGeometry args={[2.0, 32]} />
-                <meshStandardMaterial color="#f59e0b" opacity={0.2} transparent side={THREE.DoubleSide} />
-            </mesh>
-            {/* Lights */}
-            <pointLight distance={8} intensity={2} color="#f59e0b" decay={2} />
+            <pointLight distance={5} intensity={1} color="#06b6d4" />
         </group>
     );
 }
@@ -221,8 +180,7 @@ function UIOverlay({ selectedRoom, onClose }) {
             maxWidth: '500px',
             width: '90%',
             zIndex: 50,
-            backdropFilter: 'blur(10px)',
-            fontFamily: "'Share Tech Mono'"
+            backdropFilter: 'blur(10px)'
         }}>
             <button
                 onClick={onClose}
