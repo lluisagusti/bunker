@@ -115,18 +115,28 @@ function ConnectionTube({ from, toRoom }) {
     const roomPos = new THREE.Vector3(toRoom.position[0], toRoom.position[1], toRoom.position[2]);
     const centerPos = new THREE.Vector3(0, toRoom.position[1], 0);
 
-    // Length is distance - room radius (approx 1.5)
-    const dist = roomPos.distanceTo(centerPos);
+    // Shaft radius (from CentralShaft component)
+    const shaftRadius = 2.5;
+
+    // Length is distance - room radius (approx 2.25 for 4.5 depth) - shaft radius
+    // We want it to start at shaftRadius and end at roomPos (minus a bit for overlap if needed)
+    const totalDist = roomPos.distanceTo(centerPos);
+    const tubeLength = totalDist - shaftRadius - 2.2; // Subtract room radius approx
 
     // Angle
     const angle = Math.atan2(roomPos.x, roomPos.z);
 
+    // Position: Move from center by (shaftRadius + tubeLength/2) in direction of room
+    const radius = shaftRadius + tubeLength / 2;
+    const x = Math.sin(angle) * radius;
+    const z = Math.cos(angle) * radius;
+
     return (
         <mesh
-            position={[roomPos.x / 2, roomPos.y, roomPos.z / 2]}
+            position={[x, roomPos.y, z]}
             rotation={[0, angle + Math.PI / 2, Math.PI / 2]}
         >
-            <cylinderGeometry args={[0.3, 0.3, dist, 8]} />
+            <cylinderGeometry args={[0.3, 0.3, tubeLength, 8]} />
             <meshStandardMaterial color="#64748b" metalness={0.8} />
         </mesh>
     );
@@ -154,7 +164,7 @@ function Room({ data, position, onClick, isSelected }) {
                 onPointerOut={() => setHover(false)}
             >
                 {/* Different shapes could be used here based on data.type, using Box for simplicity now */}
-                <boxGeometry args={[3, 2, 3]} />
+                <boxGeometry args={[4.5, 3, 4.5]} />
                 <meshStandardMaterial
                     color={isSelected ? "#ffffff" : data.color}
                     roughness={0.2}
@@ -196,7 +206,8 @@ function BunkerView({ onSelectRoom, selectedRoomId }) {
                 const rad = (room.angle * Math.PI) / 180;
                 const x = Math.sin(rad) * radius;
                 const z = Math.cos(rad) * radius;
-                const y = room.level * levelHeight;
+                const verticalOffset = 8; // Move rooms closer to surface (relative to group at -12)
+                const y = room.level * levelHeight + verticalOffset;
                 const position = [x, y, z];
 
                 return (
