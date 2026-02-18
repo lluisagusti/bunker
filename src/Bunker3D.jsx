@@ -192,30 +192,79 @@ function Room({ data, position, onClick, isSelected }) {
     );
 }
 
+function InterRoomTube({ p1, p2 }) {
+    const start = new THREE.Vector3(...p1);
+    const end = new THREE.Vector3(...p2);
+    const distance = start.distanceTo(end);
+    const center = start.clone().add(end).multiplyScalar(0.5);
+
+    // Get direction vector
+    const direction = end.clone().sub(start).normalize();
+
+    // Create quaternion to rotate from up (0,1,0) to direction
+    const quaternion = new THREE.Quaternion();
+    quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+
+    return (
+        <mesh position={center} quaternion={quaternion}>
+            <cylinderGeometry args={[0.1, 0.1, distance, 8]} />
+            <meshStandardMaterial color="#475569" metalness={0.8} />
+        </mesh>
+    );
+}
+
 function BunkerView({ onSelectRoom, selectedRoomId }) {
     // Convert spherical coords to cartesian for room placement
     // level maps to Y, angle maps to X/Z
     const radius = 8;
     const levelHeight = 4;
+    const verticalOffset = 8;
+
+    // Pre-calculate positions
+    const roomPositions = bunkerData.map(room => {
+        const rad = (room.angle * Math.PI) / 180;
+        const x = Math.sin(rad) * radius;
+        const z = Math.cos(rad) * radius;
+        const y = room.level * levelHeight + verticalOffset;
+        return { ...room, position: [x, y, z] };
+    });
+
+    // Find connections
+    const connections = [];
+    for (let i = 0; i < roomPositions.length; i++) {
+        for (let j = i + 1; j < roomPositions.length; j++) {
+            const r1 = roomPositions[i];
+            const r2 = roomPositions[j];
+            const dist = new THREE.Vector3(...r1.position).distanceTo(new THREE.Vector3(...r2.position));
+
+            // Connect if close enough (threshold ~12 units covers adjacent sectors/levels)
+            // But ensure they aren't too close (overlapping)
+            if (dist < 12 && dist > 1) {
+                connections.push({
+                    key: `${r1.id}-${r2.id}`,
+                    p1: r1.position,
+                    p2: r2.position
+                });
+            }
+        }
+    }
 
     return (
         <group>
             <CentralShaft />
 
-            {bunkerData.map((room) => {
-                const rad = (room.angle * Math.PI) / 180;
-                const x = Math.sin(rad) * radius;
-                const z = Math.cos(rad) * radius;
-                const verticalOffset = 8; // Move rooms closer to surface (relative to group at -12)
-                const y = room.level * levelHeight + verticalOffset;
-                const position = [x, y, z];
+            {/* Inter-room connectors */}
+            {connections.map(conn => (
+                <InterRoomTube key={conn.key} p1={conn.p1} p2={conn.p2} />
+            ))}
 
+            {roomPositions.map((room) => {
                 return (
                     <React.Fragment key={room.id}>
-                        <ConnectionTube from={[0, y, 0]} toRoom={{ position }} />
+                        <ConnectionTube from={[0, room.position[1], 0]} toRoom={{ position: room.position }} />
                         <Room
                             data={room}
-                            position={position}
+                            position={room.position}
                             onClick={onSelectRoom}
                             isSelected={selectedRoomId === room.id}
                         />
