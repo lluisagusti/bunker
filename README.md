@@ -1,5 +1,5 @@
 
-# ☠️ PROJECT: BUNKER_OS ☠️
+# ☠️ BUNKER_OS ☠️
 
 ![Bunker Protocol](src/assets/readme/logo.png)
 
