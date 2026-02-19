@@ -122,6 +122,67 @@ const HackerStyles = () => (
             white-space: pre-wrap;
             animation: typing 2s steps(40, end);
         }
+
+        /* Mobile Responsive Overlay */
+        .hacker-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2rem;
+            border-radius: 4px;
+            max-width: 600px;
+            width: 90%;
+            z-index: 50;
+            backdrop-filter: blur(5px);
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+        }
+
+        .hacker-popup-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .hacker-popup-img {
+            width: 200px;
+            height: 150px;
+            border: 1px solid #33ff33;
+            position: relative;
+            flex-shrink: 0;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+        
+        @media (max-width: 768px) {
+            .hacker-popup {
+                padding: 1rem;
+                width: 95%;
+                max-height: 90vh; /* Prevent going off screen */
+                display: flex;
+                flex-direction: column;
+            }
+            .hacker-popup-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .hacker-popup-img {
+                width: 100%;
+                height: 120px; /* Shorter image on mobile */
+                margin: 0 auto;
+            }
+            .hacker-popup h2 {
+                font-size: 1.4rem !important;
+            }
+            .hacker-popup-scroll {
+                overflow-y: auto;
+                max-height: 60vh;
+                padding-right: 5px;
+            }
+        }
     `}</style>
 );
 
@@ -435,22 +496,9 @@ function UIOverlay({ selectedRoom, onClose, language }) {
 
     return (
         <div
-            className="hacker-box"
+            className="hacker-box hacker-popup"
             onClick={onClose}
-            style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                padding: '2rem',
-                borderRadius: '4px',
-                maxWidth: '600px',
-                width: '90%',
-                zIndex: 50,
-                backdropFilter: 'blur(5px)',
-                fontFamily: "'Share Tech Mono', monospace",
-                cursor: 'pointer'
-            }}>
+        >
             <div style={{
                 position: 'absolute',
                 top: 0,
@@ -474,16 +522,12 @@ function UIOverlay({ selectedRoom, onClose, language }) {
                 </button>
             </div>
 
-            <div style={{ marginTop: '30px', display: 'flex', gap: '20px', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                    <div style={{
-                        width: '200px',
-                        height: '150px',
-                        background: `url(${selectedRoom.image}) center/cover no-repeat`,
-                        border: '1px solid #33ff33',
-                        position: 'relative',
-                        flexShrink: 0
-                    }}>
+            <div className="hacker-popup-scroll" style={{ marginTop: '30px', display: 'flex', gap: '20px', flexDirection: 'column' }}>
+                <div className="hacker-popup-content">
+                    <div
+                        className="hacker-popup-img"
+                        style={{ backgroundImage: `url(${selectedRoom.image})` }}
+                    >
                         <div style={{
                             position: 'absolute',
                             bottom: 0,
