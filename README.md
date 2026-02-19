@@ -23,7 +23,7 @@ This is not just a visualization. This is a **proof of concept** for the inevita
 
 -   **CORE:** React 17 + Three.js (R3F)
 -   **VISUALS:** Retro-futuristic terminal interface (CRT effects, scanlines, glitch aesthetic).
--   **DATA:** 14 Unique Sectors (Rooms) with localized intel (EN/ES).
+-   **DATA:** 14 Unique Sectors (Rooms) with localized intel (EN/ES/CA/DE).
 -   **ASSETS:** High-resolution evidence (images) of their lavish prisons.
 -   **MODE:** 3D Interactive WebGL Environment.
 
