@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, Suspense } from 'react';
+import React, { useState, useRef, Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html, Stars, Text, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
@@ -621,9 +621,9 @@ function Tree({ position }) {
     );
 }
 
-function Rock({ position, scale = 1 }) {
+function Rock({ position, scale = 1, rotation }) {
     return (
-        <mesh position={position} rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]} scale={scale}>
+        <mesh position={position} rotation={rotation} scale={scale}>
             <dodecahedronGeometry args={[0.8, 0]} />
             <meshStandardMaterial color="#57534e" roughness={0.9} />
         </mesh>
@@ -632,7 +632,7 @@ function Rock({ position, scale = 1 }) {
 
 function Terrain() {
     // Generate random trees and rocks
-    const trees = Array.from({ length: 40 }, (_, i) => {
+    const trees = useMemo(() => Array.from({ length: 40 }, (_, i) => {
         const angle = Math.random() * Math.PI * 2;
         const radius = 8 + Math.random() * 25;
         return {
@@ -640,18 +640,19 @@ function Terrain() {
             z: Math.cos(angle) * radius,
             key: i
         };
-    });
+    }), []);
 
-    const rocks = Array.from({ length: 20 }, (_, i) => {
+    const rocks = useMemo(() => Array.from({ length: 20 }, (_, i) => {
         const angle = Math.random() * Math.PI * 2;
         const radius = 5 + Math.random() * 30;
         return {
             x: Math.sin(angle) * radius,
             z: Math.cos(angle) * radius,
             scale: 0.5 + Math.random(),
+            rotation: [Math.random() * Math.PI, Math.random() * Math.PI, 0],
             key: i
         };
-    });
+    }), []);
 
     return (
         <group position={[0, 0, 0]}>
@@ -676,7 +677,7 @@ function Terrain() {
             {trees.map(t => <Tree key={t.key} position={[t.x, 0, t.z]} />)}
 
             {/* Rocks */}
-            {rocks.map(r => <Rock key={r.key} position={[r.x, 0.4, r.z]} scale={r.scale} />)}
+            {rocks.map(r => <Rock key={r.key} position={[r.x, 0.4, r.z]} scale={r.scale} rotation={r.rotation} />)}
 
             {/* Shaft Opening (Concrete Ring) */}
             <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
