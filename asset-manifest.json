@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/bunker/static/js/main.461420bd.js",
+    "main.js": "/bunker/static/js/main.90f3d834.js",
     "static/media/08_armory.jpg": "/bunker/static/media/08_armory.5efdf9c79175ac62455f.jpg",
     "static/media/09_lab.jpg": "/bunker/static/media/09_lab.33d8d43664bf8ce32b72.jpg",
     "static/media/05_private_gym.jpg": "/bunker/static/media/05_private_gym.3a87f9c34a9644be1cac.jpg",
@@ -16,9 +16,9 @@
     "static/media/04_master_bedroom.jpg": "/bunker/static/media/04_master_bedroom.368a977afa4a1e04a20d.jpg",
     "static/media/11_cinema_room.jpg": "/bunker/static/media/11_cinema_room.df212afe120e322841e2.jpg",
     "index.html": "/bunker/index.html",
-    "main.461420bd.js.map": "/bunker/static/js/main.461420bd.js.map"
+    "main.90f3d834.js.map": "/bunker/static/js/main.90f3d834.js.map"
   },
   "entrypoints": [
-    "static/js/main.461420bd.js"
+    "static/js/main.90f3d834.js"
   ]
 }
