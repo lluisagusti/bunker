@@ -434,19 +434,23 @@ function UIOverlay({ selectedRoom, onClose, language }) {
     if (!selectedRoom) return null;
 
     return (
-        <div className="hacker-box" style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            padding: '2rem',
-            borderRadius: '4px',
-            maxWidth: '600px',
-            width: '90%',
-            zIndex: 50,
-            backdropFilter: 'blur(5px)',
-            fontFamily: "'Share Tech Mono', monospace"
-        }}>
+        <div
+            className="hacker-box"
+            onClick={onClose}
+            style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '2rem',
+                borderRadius: '4px',
+                maxWidth: '600px',
+                width: '90%',
+                zIndex: 50,
+                backdropFilter: 'blur(5px)',
+                fontFamily: "'Share Tech Mono', monospace",
+                cursor: 'pointer'
+            }}>
             <div style={{
                 position: 'absolute',
                 top: 0,
