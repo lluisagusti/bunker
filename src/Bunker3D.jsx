@@ -355,7 +355,7 @@ function ConnectionTube({ from, toRoom }) {
     );
 }
 
-function Room({ data, position, onClick, isSelected, language }) {
+function Room({ data, position, onClick, isSelected, language, showTags }) {
     const ref = useRef();
     const [hovered, setHover] = useState(false);
 
@@ -388,20 +388,22 @@ function Room({ data, position, onClick, isSelected, language }) {
             </mesh>
 
             {/* Label always facing camera */}
-            <Html distanceFactor={15} position={[0, 1.5, 0]}>
-                <div style={{
-                    color: 'white',
-                    background: 'rgba(0,0,0,0.7)',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontSize: '10px',
-                    whiteSpace: 'nowrap',
-                    pointerEvents: 'none',
-                    fontFamily: "'Share Tech Mono', monospace"
-                }}>
-                    {data.name[language]}
-                </div>
-            </Html>
+            {showTags && (
+                <Html distanceFactor={15} position={[0, 1.5, 0]}>
+                    <div style={{
+                        color: 'white',
+                        background: 'rgba(0,0,0,0.7)',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '10px',
+                        whiteSpace: 'nowrap',
+                        pointerEvents: 'none',
+                        fontFamily: "'Share Tech Mono', monospace"
+                    }}>
+                        {data.name[language]}
+                    </div>
+                </Html>
+            )}
         </group>
     );
 }
@@ -427,7 +429,7 @@ function InterRoomTube({ p1, p2 }) {
     );
 }
 
-function BunkerView({ onSelectRoom, selectedRoomId, language }) {
+function BunkerView({ onSelectRoom, selectedRoomId, language, showTags }) {
     // Convert spherical coords to cartesian for room placement
     // level maps to Y, angle maps to X/Z
     const radius = 8;
@@ -482,6 +484,7 @@ function BunkerView({ onSelectRoom, selectedRoomId, language }) {
                             onClick={onSelectRoom}
                             isSelected={selectedRoomId === room.id}
                             language={language}
+                            showTags={showTags}
                         />
                     </React.Fragment>
                 );
@@ -822,6 +825,7 @@ export default function Bunker3D() {
                             onSelectRoom={setSelectedRoom}
                             selectedRoomId={selectedRoom?.id}
                             language={language}
+                            showTags={!selectedRoom}
                         />
                     </group>
                     <Terrain />
