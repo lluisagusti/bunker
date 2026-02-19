@@ -520,6 +520,15 @@ const translations = {
         runDiagnostic: 'EXECUTAR_DIAG',
         overrideLock: 'ANUL·LAR_TANCAMENT',
         viewLogs: 'VEURE_REGISTRES'
+    },
+    de: {
+        header: 'SICHERE ANLAGE VISUALISIERUNG',
+        systemOnline: 'SYSTEM ONLINE',
+        controls: 'STEUERUNG: DOPPELKLICK=DREHEN | SCROLL=ZOOM | KLICK_KNOTEN=DATENZUGRIFF',
+        status: 'ONLINE',
+        runDiagnostic: 'DIAGNOSE_STARTEN',
+        overrideLock: 'SPERRE_AUFHEBEN',
+        viewLogs: 'PROTOKOLLE_ANZEIGEN'
     }
 };
 
@@ -725,7 +734,7 @@ function Terrain() {
 
 export default function Bunker3D() {
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [language, setLanguage] = useState('en'); // 'en', 'es', 'ca'
+    const [language, setLanguage] = useState('en'); // 'en', 'es', 'ca', 'de'
 
     const t = translations[language];
 
@@ -793,6 +802,12 @@ export default function Bunker3D() {
                         onClick={() => setLanguage('ca')}
                     >
                         CA
+                    </button>
+                    <button
+                        className={`hacker-btn ${language === 'de' ? 'active' : ''}`}
+                        onClick={() => setLanguage('de')}
+                    >
+                        DE
                     </button>
                 </div>
             </div>
