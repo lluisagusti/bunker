@@ -490,9 +490,41 @@ function BunkerView({ onSelectRoom, selectedRoomId, language }) {
     );
 }
 
+const translations = {
+    en: {
+        header: 'SECURE FACILITY VISUALIZATION',
+        systemOnline: 'SYSTEM ONLINE',
+        controls: 'CONTROLS: DOUBLE_CLICK=ROTATE | SCROLL=ZOOM | CLICK_NODES=ACCESS_DATA',
+        status: 'ONLINE',
+        runDiagnostic: 'RUN_DIAGNOSTIC',
+        overrideLock: 'OVERRIDE_LOCK',
+        viewLogs: 'VIEW_LOGS'
+    },
+    es: {
+        header: 'VISUALIZACIÓN DE INSTALACIÓN SEGURA',
+        systemOnline: 'SISTEMA CONECTADO',
+        controls: 'CONTROLES: DOBLE_CLIC=ROTAR | SCROLL=ZOOM | CLIC_NODOS=ACCESO_DATOS',
+        status: 'EN LÍNEA',
+        runDiagnostic: 'EJECUTAR_DIAG',
+        overrideLock: 'ANULAR_CIERRE',
+        viewLogs: 'VER_REGISTROS'
+    },
+    ca: {
+        header: 'VISUALITZACIÓ D\'INSTAL·LACIÓ SEGURA',
+        systemOnline: 'SISTEMA ONLINE',
+        controls: 'CONTROLS: DOBLE_CLIC=ROTOR | SCROLL=ZOOM | CLIC_NODES=ACCÉS_DADES',
+        status: 'EN LÍNIA',
+        runDiagnostic: 'EXECUTAR_DIAG',
+        overrideLock: 'ANUL·LAR_TANCAMENT',
+        viewLogs: 'VEURE_REGISTRES'
+    }
+};
+
 // --- 2D Overlay ---
 function UIOverlay({ selectedRoom, onClose, language }) {
     if (!selectedRoom) return null;
+
+    const t = translations[language];
 
     return (
         <div
@@ -556,7 +588,7 @@ function UIOverlay({ selectedRoom, onClose, language }) {
                             <div>&gt; LEVEL: {selectedRoom.level}</div>
                             <div>&gt; SECTOR: {selectedRoom.angle}°</div>
                             <div>&gt; TYPE: {selectedRoom.type?.toUpperCase()}</div>
-                            <div>&gt; STATUS: {language === 'en' ? 'ONLINE' : 'EN LÍNEA'}</div>
+                            <div>&gt; STATUS: {t.status}</div>
                         </div>
                     </div>
                 </div>
@@ -589,9 +621,9 @@ function UIOverlay({ selectedRoom, onClose, language }) {
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                    <button className="hacker-btn" style={{ flex: 1 }}>{language === 'en' ? 'RUN_DIAGNOSTIC' : 'EJECUTAR_DIAG'}</button>
-                    <button className="hacker-btn" style={{ flex: 1 }}>{language === 'en' ? 'OVERRIDE_LOCK' : 'ANULAR_CIERRE'}</button>
-                    <button className="hacker-btn" style={{ flex: 1 }}>{language === 'en' ? 'VIEW_LOGS' : 'VER_REGISTROS'}</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>{t.runDiagnostic}</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>{t.overrideLock}</button>
+                    <button className="hacker-btn" style={{ flex: 1 }}>{t.viewLogs}</button>
                 </div>
             </div>
         </div>
@@ -690,7 +722,9 @@ function Terrain() {
 
 export default function Bunker3D() {
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [language, setLanguage] = useState('en'); // 'en' or 'es'
+    const [language, setLanguage] = useState('en'); // 'en', 'es', 'ca'
+
+    const t = translations[language];
 
     return (
         <div className="crt" style={{ width: '100%', height: '100vh', background: '#000', position: 'relative' }}>
@@ -733,7 +767,7 @@ export default function Bunker3D() {
                         opacity: 0.8,
                         fontFamily: 'monospace'
                     }}>
-                        [{language === 'en' ? 'SECURE FACILITY VISUALIZATION' : 'VISUALIZACIÓN DE INSTALACIÓN SEGURA'}] :: [{language === 'en' ? 'SYSTEM ONLINE' : 'SISTEMA CONECTADO'}]
+                        [{t.header}] :: [{t.systemOnline}]
                     </p>
                 </div>
 
@@ -751,6 +785,12 @@ export default function Bunker3D() {
                     >
                         ES
                     </button>
+                    <button
+                        className={`hacker-btn ${language === 'ca' ? 'active' : ''}`}
+                        onClick={() => setLanguage('ca')}
+                    >
+                        CA
+                    </button>
                 </div>
             </div>
 
@@ -765,10 +805,10 @@ export default function Bunker3D() {
                 opacity: 0.7,
                 textShadow: '0 0 5px rgba(51, 255, 51, 0.5)'
             }}>
-                &gt; {language === 'en' ? 'CONTROLS: DOUBLE_CLICK=ROTATE | SCROLL=ZOOM | CLICK_NODES=ACCESS_DATA' : 'CONTROLES: DOBLE_CLIC=ROTAR | SCROLL=ZOOM | CLIC_NODOS=ACCESO_DATOS'}
+                &gt; {t.controls}
             </div>
 
-            <Canvas camera={{ position: [20, 10, 20], fov: 50 }}>
+            <Canvas camera={{ position: [35, 30, 35], fov: 50 }}>
                 <fog attach="fog" args={['#000500', 20, 90]} /> {/* Greenish fog */}
                 <ambientLight intensity={0.2} color="#ccffcc" />
                 <spotLight position={[50, 50, 20]} angle={0.5} penumbra={1} intensity={1} castShadow color="#aaffaa" />
@@ -792,7 +832,7 @@ export default function Bunker3D() {
                     minDistance={10}
                     maxDistance={60}
                     maxPolarAngle={Math.PI / 1.8}
-                    autoRotate={false}
+                    autoRotate={true}
                     autoRotateSpeed={0.5}
                     target={[0, -5, 0]}
                 />
