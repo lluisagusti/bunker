@@ -54,7 +54,7 @@ const HackerStyles = () => (
             left: 0;
             bottom: 0;
             right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.036), rgba(0, 255, 0, 0.012), rgba(0, 0, 255, 0.036));
             z-index: 2;
             background-size: 100% 2px, 3px 100%;
             pointer-events: none;
@@ -68,7 +68,7 @@ const HackerStyles = () => (
             left: 0;
             bottom: 0;
             right: 0;
-            background: rgba(18, 16, 16, 0.1);
+            background: rgba(18, 16, 16, 0.06);
             opacity: 0;
             z-index: 2;
             pointer-events: none;
@@ -79,8 +79,8 @@ const HackerStyles = () => (
             width: 100%;
             height: 100px;
             z-index: 10;
-            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(32, 255, 77, 0.1) 50%, rgba(0,0,0,0) 100%);
-            opacity: 0.1;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(32, 255, 77, 0.06) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.06;
             position: absolute;
             bottom: 100%;
             animation: scanline 10s linear infinite;
@@ -826,7 +826,7 @@ export default function Bunker3D() {
                 &gt; {t.controls}
             </div>
 
-            <Canvas camera={{ position: [35, 30, 35], fov: 50 }}>
+            <Canvas camera={{ position: [26, -5, 26], fov: 50 }}>
                 <fog attach="fog" args={['#000500', 20, 90]} /> {/* Greenish fog */}
                 <ambientLight intensity={0.2} color="#ccffcc" />
                 <spotLight position={[50, 50, 20]} angle={0.5} penumbra={1} intensity={1} castShadow color="#aaffaa" />
@@ -853,7 +853,7 @@ export default function Bunker3D() {
                     maxPolarAngle={Math.PI / 1.8}
                     autoRotate={true}
                     autoRotateSpeed={0.5}
-                    target={[0, -5, 0]}
+                    target={[0, -10, 0]}
                 />
             </Canvas>
 
